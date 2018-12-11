@@ -19,6 +19,7 @@ def build_an_image_example(img_fname):
     sample code to build an image and save it as PNG
     """
     # create the image in memory
+
     my_image = Image.new('RGB', (512,512) )
     my_image_pixels = my_image.load()
 
@@ -40,12 +41,26 @@ def build_an_image_example(img_fname):
     my_image.save(img_fname, 'png')
 
 
+
 def build_image_yellow(img_fname, image_x_size=512, image_y_size=512):
     """
     create an image that is full yellow.
     Just yellow at every pixel
     """
-    pass
+    my_image = Image.new('RGB', (512,512) )
+    my_image_pixels = my_image.load()
+
+    image_x_size = my_image.size[0]
+    image_y_size = my_image.size[1]
+
+    for x in range(image_x_size):
+        for y in range(image_y_size):
+            pixel_color = (255, 255, 0)
+            my_image_pixels[x, y] = pixel_color
+
+    print(f'saving {img_fname}')
+    my_image.save(img_fname, 'png')
+
 
 def build_image_double_red_gradient(img_fname):
     """
@@ -54,7 +69,25 @@ def build_image_double_red_gradient(img_fname):
     from left to right.  And when it reaches 255, start over at 0
     and start another gradient from 0 to 255.
     """
-    pass
+    my_image = Image.new('RGB', (512,512) )
+    my_image_pixels = my_image.load()
+
+    image_x_size = my_image.size[0]
+    image_y_size = my_image.size[1]
+
+    counter = 0
+
+    for x in range(image_x_size):
+        x_pix = counter
+        counter = counter + 1
+        for y in range(image_y_size):
+            pixel_color = (255, 255, 0)
+            my_image_pixels[x, y] = x_pix
+
+    print(f'saving {img_fname}')
+    my_image.save(img_fname, 'png')
+
+
 
 def build_image_single_red_gradient(img_fname):
     """
