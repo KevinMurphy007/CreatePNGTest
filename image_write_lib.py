@@ -75,14 +75,12 @@ def build_image_double_red_gradient(img_fname):
     image_x_size = my_image.size[0]
     image_y_size = my_image.size[1]
 
-    counter = 0
 
     for x in range(image_x_size):
-        x_pix = counter
-        counter = counter + 1
+
         for y in range(image_y_size):
-            pixel_color = (255, 255, 0)
-            my_image_pixels[x, y] = x_pix
+            pixel_color = (x%256, 0, 0)
+            my_image_pixels[x, y] = pixel_color
 
     print(f'saving {img_fname}')
     my_image.save(img_fname, 'png')
@@ -95,7 +93,22 @@ def build_image_single_red_gradient(img_fname):
     but 0 has to be the leftmost and 255 has to be the rightmost
     and the gradient scales smoothly across the 512 horizontal pixels.
     """
-    pass
+    my_image = Image.new('RGB', (512,512) )
+    my_image_pixels = my_image.load()
+
+    image_x_size = my_image.size[0]
+    image_y_size = my_image.size[1]
+
+
+    for x in range(image_x_size):
+
+        for y in range(image_y_size):
+            pixel_color = (int((x)/2), 0, 0)
+            my_image_pixels[x, y] = pixel_color
+
+    print(f'saving {img_fname}')
+    my_image.save(img_fname, 'png')
+
 
 
 def build_image_yellow_gradient_horizontal(img_fname):
@@ -106,7 +119,22 @@ def build_image_yellow_gradient_horizontal(img_fname):
     Similar to test_single_red_gradient except color yellow instead
     of red
     """
-    pass
+    my_image = Image.new('RGB', (512,512) )
+    my_image_pixels = my_image.load()
+
+    image_x_size = my_image.size[0]
+    image_y_size = my_image.size[1]
+
+
+    for x in range(image_x_size):
+
+        for y in range(image_y_size):
+            pixel_color = (int((x)/2), int((x)/2), 0)
+            my_image_pixels[x, y] = pixel_color
+
+    print(f'saving {img_fname}')
+    my_image.save(img_fname, 'png')
+
 
 def build_image_cyan_gradient_diagonal(img_fname):
     """
@@ -117,6 +145,8 @@ def build_image_cyan_gradient_diagonal(img_fname):
     bottom right
     """
     pass
+
+
 
 def build_image_green_gradient_diagonal_inverted(img_fname):
     """
@@ -170,6 +200,14 @@ def build_palette_dictionary(palette_fname):
     return the dictionary
     """
     my_palette_dict = dict()
+    with open(palette_fname) as csvfile:
+        read= csv.reader(csvfile)
+        for row in read:
+            key = row[0]
+            key = int(key)
+            value = (int(row[1]), int(row[2]), int(row[3]))
+            my_palette_dict[key]= value
+    print(my_palette_dict)
 
     return my_palette_dict
 
@@ -189,12 +227,34 @@ def build_image_using_palette(img_fname, palette_dict):
         multiple the x coordinate and the y coordinate and then double it
         add those two together
         take the square root of that.
-        divide it by the palette_max+1 (355 in our case) and take the remainder.
         Make sure this is an INT
+        divide it by the palette_max+1 (355 in our case) and take the remainder.
+
 
         This is your value
 
     Now, using the value, find the RGB color in the palette.  Set the
     pixel to that color
     """
-    pass
+    my_image = Image.new('RGB', (512,512) )
+    my_image_pixels = my_image.load()
+
+    image_x_size = my_image.size[0]
+    image_y_size = my_image.size[1]
+
+
+    for x in range(image_x_size):
+
+        for y in range(image_y_size):
+            Jim = abs((x * x) - (y * y))
+            Jim2 = (2 * (x * y))
+            var = sqrt((Jim + Jim2))
+            var = int(var)
+            var = var % 355
+            print(var)
+            pixel_color = palette_dict[var]
+            print(pixel_color)
+            my_image_pixels[x, y] = pixel_color
+
+    print(f'saving {img_fname}')
+    my_image.save(img_fname, 'png')
