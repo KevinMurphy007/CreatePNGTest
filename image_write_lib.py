@@ -144,7 +144,25 @@ def build_image_cyan_gradient_diagonal(img_fname):
     Consider what the value of x+y is at the top left and at the
     bottom right
     """
-    pass
+    my_image = Image.new('RGB', (512,512) )
+    my_image_pixels = my_image.load()
+
+    image_x_size = my_image.size[0]
+    image_y_size = my_image.size[1]
+
+
+    for x in range(image_x_size):
+
+        for y in range(image_y_size):
+            numero = (x + y)
+
+            pixel_color = (0, numero, numero)
+            my_image_pixels[x, y] = pixel_color
+
+    print(f'saving {img_fname}')
+    my_image.save(img_fname, 'png')
+
+
 
 
 
@@ -207,10 +225,15 @@ def build_palette_dictionary(palette_fname):
             key = int(key)
             value = (int(row[1]), int(row[2]), int(row[3]))
             my_palette_dict[key]= value
-    print(my_palette_dict)
-
     return my_palette_dict
 
+def calculate(x, y):
+    Jim = abs((x * x) - (y * y))
+    Jim2 = (2 * (x * y))
+    var = sqrt((Jim + Jim2))
+    var = int(var)
+    var = var % 355
+    return var
 
 def build_image_using_palette(img_fname, palette_dict):
     """
@@ -246,14 +269,10 @@ def build_image_using_palette(img_fname, palette_dict):
     for x in range(image_x_size):
 
         for y in range(image_y_size):
-            Jim = abs((x * x) - (y * y))
-            Jim2 = (2 * (x * y))
-            var = sqrt((Jim + Jim2))
-            var = int(var)
-            var = var % 355
-            print(var)
-            pixel_color = palette_dict[var]
-            print(pixel_color)
+
+
+            pixel_color = calculate(x, y)
+
             my_image_pixels[x, y] = pixel_color
 
     print(f'saving {img_fname}')
