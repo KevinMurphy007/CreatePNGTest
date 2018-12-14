@@ -13,7 +13,7 @@ images whose size is not predetermined/hardcoded.
 from PIL import Image
 import csv
 from math import sqrt
-
+from numba import jit
 def build_an_image_example(img_fname):
     """
     sample code to build an image and save it as PNG
@@ -254,12 +254,12 @@ def calculate(x, y):
 
     var = var % 15
     return var
-
+@jit
 def calculate2(z, z0):
     for i in range(255):
-        ans = z**2 + z0
+        ans = z**3 + z0**2
         z = ans
-        if abs(z) >= 2:
+        if z.real **2 + z.imag**2 > 4:
             break
     return i
 
