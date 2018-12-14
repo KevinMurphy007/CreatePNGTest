@@ -93,7 +93,7 @@ def build_image_single_red_gradient(img_fname):
     but 0 has to be the leftmost and 255 has to be the rightmost
     and the gradient scales smoothly across the 512 horizontal pixels.
     """
-    my_image = Image.new('RGB', (512,512) )
+    my_image = Image.new('RGB', (512, 512) )
     my_image_pixels = my_image.load()
 
     image_x_size = my_image.size[0]
@@ -154,7 +154,7 @@ def build_image_cyan_gradient_diagonal(img_fname):
     for x in range(image_x_size):
 
         for y in range(image_y_size):
-            numero = (x + y)
+            numero = (int(.25 * (x)) + int(.25 * (y)))
 
             pixel_color = (0, numero, numero)
             my_image_pixels[x, y] = pixel_color
@@ -172,7 +172,26 @@ def build_image_green_gradient_diagonal_inverted(img_fname):
     This is similar to build_image_cyan_gradient_diagonal except
     green and the 255 is top left and 0 is bottom right.
     """
-    pass
+    my_image = Image.new('RGB', (512,512) )
+    my_image_pixels = my_image.load()
+
+    image_x_size = my_image.size[0]
+    image_y_size = my_image.size[1]
+
+
+    for x in range(image_x_size):
+
+        for y in range(image_y_size):
+            numero =  int((x + y)/4)
+
+            pixel_color = (0, numero, 0)
+            my_image_pixels[x, y] = pixel_color
+
+    print(f'saving {img_fname}')
+    my_image.save(img_fname, 'png')
+
+
+
 
 def build_image_red_bands_horizontal(img_fname):
     """
@@ -232,8 +251,18 @@ def calculate(x, y):
     Jim2 = (2 * (x * y))
     var = sqrt((Jim + Jim2))
     var = int(var)
-    var = var % 355
+
+    var = var % 15
     return var
+
+def calculate2(z, z0):
+    for i in range(255):
+        ans = z**2 + z0
+        z = ans
+        if abs(z) >= 2:
+            break
+    return i
+
 
 def build_image_using_palette(img_fname, palette_dict):
     """
@@ -259,7 +288,7 @@ def build_image_using_palette(img_fname, palette_dict):
     Now, using the value, find the RGB color in the palette.  Set the
     pixel to that color
     """
-    my_image = Image.new('RGB', (512,512) )
+    my_image = Image.new('RGB', (700, 400) )
     my_image_pixels = my_image.load()
 
     image_x_size = my_image.size[0]
@@ -267,12 +296,13 @@ def build_image_using_palette(img_fname, palette_dict):
 
 
     for x in range(image_x_size):
-
+        x_coord = x/200 -2.5
         for y in range(image_y_size):
-
-
-            pixel_color = calculate(x, y)
-
+            y_coord = y/200 -1
+            z = x_coord + y_coord * 1j
+            z0 = z
+            key = calculate2(z, z0)
+            pixel_color = palette_dict[key]
             my_image_pixels[x, y] = pixel_color
 
     print(f'saving {img_fname}')
